@@ -1,64 +1,74 @@
 package com.example.appregistrogastos;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link confiFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class confiFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public confiFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment confiFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static confiFragment newInstance(String param1, String param2) {
-        confiFragment fragment = new confiFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private RecyclerView recyclerCategories;
+    private EditText etNewCategory;
+    private Button btnAddCategory;
+    private CategoryAdapter adapter;
+    private List<String> categories;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_confi, container, false);
+        View view = inflater.inflate(R.layout.fragment_confi, container, false);
+
+        recyclerCategories = view.findViewById(R.id.recycler_categories);
+        etNewCategory = view.findViewById(R.id.et_new_category);
+        btnAddCategory = view.findViewById(R.id.btn_add_category);
+
+        categories = getExampleCategories();
+        adapter = new CategoryAdapter(categories, position -> {
+            categories.remove(position);
+            adapter.notifyItemRemoved(position);
+            adapter.notifyItemRangeChanged(position, categories.size());
+            Toast.makeText(getContext(), "Categoría eliminada", Toast.LENGTH_SHORT).show();
+        });
+
+        recyclerCategories.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerCategories.setAdapter(adapter);
+
+        btnAddCategory.setOnClickListener(v -> addCategory());
+
+        return view;
+    }
+
+    private List<String> getExampleCategories() {
+        List<String> exampleList = new ArrayList<>();
+        exampleList.add("Comida");
+        exampleList.add("Transporte");
+        exampleList.add("Ocio");
+        return exampleList;
+    }
+
+    private void addCategory() {
+        String categoryName = etNewCategory.getText().toString().trim();
+        if (categoryName.isEmpty()) {
+            etNewCategory.setError("Ingrese un nombre de categoría");
+            return;
+        }
+
+        if (categories.contains(categoryName)) {
+            etNewCategory.setError("Esta categoría ya existe");
+            return;
+        }
+
+        categories.add(categoryName);
+        adapter.notifyItemInserted(categories.size() - 1);
+        etNewCategory.setText("");
+        Toast.makeText(getContext(), "Categoría agregada: " + categoryName, Toast.LENGTH_SHORT).show();
     }
 }

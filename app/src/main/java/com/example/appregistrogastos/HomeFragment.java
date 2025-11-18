@@ -1,64 +1,78 @@
 package com.example.appregistrogastos;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private RecyclerView recyclerTransactions;
+    private TextView tvTotalIngresos, tvTotalEgresos, tvBalance, tvCurrentMonth;
+    private TransactionAdapter adapter;
+    private List<Transaction> transactions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        recyclerTransactions = view.findViewById(R.id.recycler_transactions);
+        tvTotalIngresos = view.findViewById(R.id.tv_total_ingresos);
+        tvTotalEgresos = view.findViewById(R.id.tv_total_egresos);
+        tvBalance = view.findViewById(R.id.tv_balance);
+        tvCurrentMonth = view.findViewById(R.id.tv_current_month);
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", new Locale("es", "ES"));
+        tvCurrentMonth.setText(monthFormat.format(calendar.getTime()));
+
+        transactions = getExampleTransactions();
+        adapter = new TransactionAdapter(transactions);
+        recyclerTransactions.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerTransactions.setAdapter(adapter);
+
+        updateSummary();
+
+        return view;
+    }
+
+    private List<Transaction> getExampleTransactions() {
+        List<Transaction> exampleList = new ArrayList<>();
+        exampleList.add(new Transaction("Comida", "Almuerzo en restaurante", 25.50, "2025-11-17", false));
+        exampleList.add(new Transaction("Transporte", "Taxi al trabajo", 15.00, "2025-11-17", false));
+        exampleList.add(new Transaction("Ocio", "Cine con amigos", 30.00, "2025-11-16", false));
+        exampleList.add(new Transaction("Ingreso", "Salario mensual", 2500.00, "2025-11-15", true));
+        exampleList.add(new Transaction("Comida", "Desayuno", 8.50, "2025-11-15", false));
+        exampleList.add(new Transaction("Transporte", "Pasaje de bus", 2.50, "2025-11-14", false));
+        return exampleList;
+    }
+
+    private void updateSummary() {
+        double totalIngresos = 0;
+        double totalEgresos = 0;
+
+        for (Transaction transaction : transactions) {
+            if (transaction.isIncome()) {
+                totalIngresos += transaction.getAmount();
+            } else {
+                totalEgresos += transaction.getAmount();
+            }
+        }
+
+        double balance = totalIngresos - totalEgresos;
+
+        tvTotalIngresos.setText("S/ " + String.format("%.2f", totalIngresos));
+        tvTotalEgresos.setText("S/ " + String.format("%.2f", totalEgresos));
+        tvBalance.setText("S/ " + String.format("%.2f", balance));
     }
 }
