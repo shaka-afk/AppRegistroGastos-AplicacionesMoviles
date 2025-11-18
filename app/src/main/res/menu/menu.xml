@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="home"
+        android:icon="@drawable/baseline_home_24"
+        android:id="@+id/home"/>
+    <item
+        android:title="agregar"
+        android:icon="@drawable/plus_bold_svgrepo_com"
+        android:id="@+id/agregar"
+        />
+    <item
+        android:title="resumen"
+        android:icon="@drawable/arrow_trending_svgrepo_com"
+        android:id="@+id/resumen"/>
+    <item
+        android:title="confi"
+        android:icon="@drawable/baseline_settings_24"
+        android:id="@+id/confi"/>
+</menu>
