@@ -35,7 +35,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        holder.bind(categories.get(position));
+        holder.bind(categories.get(position), deleteListener, position);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return categories != null ? categories.size() : 0;
     }
 
-    class CategoryViewHolder extends RecyclerView.ViewHolder {
+    static class CategoryViewHolder extends RecyclerView.ViewHolder {
         private TextView tvCategoryName;
         private ImageButton btnDelete;
 
@@ -53,11 +53,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             btnDelete = itemView.findViewById(R.id.btn_delete);
         }
 
-        public void bind(String category) {
+        public void bind(String category, OnCategoryDeleteListener listener, int position) {
             tvCategoryName.setText(category);
             btnDelete.setOnClickListener(v -> {
-                if (deleteListener != null) {
-                    deleteListener.onDelete(getAdapterPosition());
+                if (listener != null) {
+                    listener.onDelete(position);
                 }
             });
         }
