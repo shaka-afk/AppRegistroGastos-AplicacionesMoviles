@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        // Configurar el BottomNavigationView
         fragmentManager = getSupportFragmentManager();
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
-
+        // Configurar el Fragment inicial
         if (savedInstanceState == null) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.fragment_container, new HomeFragment());
