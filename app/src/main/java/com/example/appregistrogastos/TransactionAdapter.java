@@ -58,8 +58,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
             String amountText = (transaction.isIncome() ? "+" : "-") + "S/ " + String.format("%.2f", transaction.getAmount());
             tvAmount.setText(amountText);
-            tvAmount.setTextColor(itemView.getContext().getColor(
-                    transaction.isIncome() ? android.R.color.holo_green_dark : android.R.color.holo_red_dark));
         }
     }
 }
