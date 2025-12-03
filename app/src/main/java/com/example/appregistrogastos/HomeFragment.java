@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
-
+    //Método para obtener una lista de transacciones de ejemplo
     private List<Transaction> getExampleTransactions() {
         List<Transaction> exampleList = new ArrayList<>();
         exampleList.add(new Transaction("Comida", "Almuerzo en restaurante", 25.50, "2025-11-17", false));

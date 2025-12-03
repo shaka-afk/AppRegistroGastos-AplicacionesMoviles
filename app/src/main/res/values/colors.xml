@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="primary_brand">#1D3557</color>
+
+    <color name="income_green">#2A9D8F</color>
+    <color name="expense_red">#E63946</color>
+
+    <color name="balance_blue">#457B9D</color>
 </resources>
