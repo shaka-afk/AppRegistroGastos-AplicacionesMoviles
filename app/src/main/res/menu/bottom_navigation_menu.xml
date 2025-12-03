@@ -16,7 +16,7 @@
         android:icon="@drawable/arrow_trending_svgrepo_com"
         android:id="@+id/resumen"/>
     <item
-        android:title="confi"
+        android:title="configuración"
         android:icon="@drawable/baseline_settings_24"
         android:id="@+id/confi"/>
 </menu>
